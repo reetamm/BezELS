@@ -1,0 +1,82 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# BezELS
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+BezELS (Bezier splines for Estimating Limit Sets) performs tail inference for bivariate data with unit exponential marginal distributions. The package implements the methodology from [this paper on arXiv](https://arxiv.org/abs/2306.13257).
+
+## Installation
+
+You can install the development version of BezELS from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("reetamm/BezELS")
+```
+
+## Example
+
+The following example generates data from a logistic copula, fits a Bezier spline to the limit set boundary using MCMC, and does tail inference.
+
+```{r estimation}
+library(BezELS)
+set.seed(1)
+# Generate some data
+simdata             <- gen_data_exp(n = 500, theta = 0.3, tau = 0.75, copula = 'l')
+x                   <- simdata$x
+r                   <- simdata$r
+w                   <- simdata$w
+data_marg_r_0       <- simdata$data_marg_r_0
+# Run MCMC to fit a bezier spline to the limit set
+samples  <- fit_mcmc_bezier( N = data_marg_r_0$N,
+                         r = data_marg_r_0$r,
+                         w = data_marg_r_0$w,
+                         r_0 = data_marg_r_0$r_0,
+                         iters = 1100, burn = 100,
+                         traceplot=F, print.every = 100)
+samples <- samples[101:1100,] # drop the burn-in samples
+```
+We're going to plot the posterior draws in both polar and Euclidean coordinates.
+```{r plots, warning=FALSE}
+r_0_marg            <- simdata$r_0_marg
+above_thresh_marg   <- simdata$above_thresh_marg
+par(mfrow=c(1,2))
+medcurve = plot_bezier_polar(mcmc_samples = samples, x = x, r_0_marg = r_0_marg, above_thresh_marg = above_thresh_marg,
+                                 copula = 'l', theta = 0.3, thin = 1, plot.fig = T, plottitle = 'Polar coordinates')
+plot_bezier_euclidean(mcmc_samples = samples, x = x, theta = 0.3, copula = 'l', plottitle = 'Euclidean coordinates',
+                          thin = 1, above_thresh_marg = above_thresh_marg, plot.truth = T, medcurve = medcurve)
+```
+
+Finally, let's calculate some metrics.
+```{r inference}
+summary(apply(samples[,1:10], 1, eta_empirical))
+summary(samples[,11])
+
+omega <- seq(0.01,0.99,by = 0.01)
+delta <- omega
+lambda_omega    <- rep(NA,99)
+tau1_delta      <- rep(NA,99)
+
+for(i in 1:99){
+    lambda_omega[i] <- median(apply(samples,1,lambda_empirical, omega = omega[i]))
+    tau1_delta[i]   <- median(apply(samples,1,tau_empirical, delta = delta[i]))
+}
+par(mfrow=c(1,2))
+plot(omega,lambda_omega,'l', ylab = expression(lambda(omega)), xlab = expression(omega))
+plot(delta,tau1_delta,'l', ylab = expression(tau[1](delta)), xlab = expression(delta))
+```
