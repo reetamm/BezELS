@@ -10,3 +10,4 @@ Encoding: UTF-8
 LazyData: true
 Imports: fda, bezier, evd, mvtnorm, scales
 RoxygenNote: 7.3.1
+URL: https://reetamm.github.io/BezELS/
