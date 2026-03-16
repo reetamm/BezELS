@@ -50,11 +50,11 @@ above_thresh_marg=T
 ``` r
 simdata <- gen_data_exp(n = 600, theta = 0.8, tau=0.75, copula = 'g')
 summary(simdata$x)
-#>        V1                 V2         
-#>  Min.   :0.005722   Min.   :0.00232  
-#>  1st Qu.:0.263048   1st Qu.:0.26039  
-#>  Median :0.643098   Median :0.68423  
-#>  Mean   :0.925769   Mean   :0.93596  
-#>  3rd Qu.:1.240948   3rd Qu.:1.29205  
-#>  Max.   :6.279349   Max.   :6.81087  
+#>        V1                 V2           
+#>  Min.   :0.005073   Min.   :0.0005344  
+#>  1st Qu.:0.239599   1st Qu.:0.2636041  
+#>  Median :0.652507   Median :0.6627482  
+#>  Mean   :0.931075   Mean   :0.9137787  
+#>  3rd Qu.:1.275914   3rd Qu.:1.2063422  
+#>  Max.   :6.457211   Max.   :4.9893931  
 ```
