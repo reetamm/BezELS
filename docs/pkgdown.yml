@@ -2,7 +2,7 @@ pandoc: '3.2'
 pkgdown: 2.2.0
 pkgdown_sha: ~
 articles: {}
-last_built: 2026-02-13T21:21Z
+last_built: 2026-03-16T04:24Z
 urls:
   reference: https://reetamm.github.io/BezELS/reference
   article: https://reetamm.github.io/BezELS/articles

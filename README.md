@@ -8,9 +8,8 @@
 
 BEZELS (BEZier splines for Estimating Limit Sets) performs tail
 inference for bivariate data with unit exponential marginal
-distributions. The package implements the methodology from
-[this](https://doi.org/10.1214/25-BA1514) by Majumder, Shaby, Reich, and
-Cooley, in Bayesian Analysis (2025).
+distributions. The package implements the methodology from [Majumder et.
+al. (2025), *Bayesian Analysis*](https://doi.org/10.1214/25-BA1514).
 
 ## Installation
 
